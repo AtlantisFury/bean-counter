@@ -5,11 +5,21 @@
 	* utilizes chained middleware functions to be reached
 */
 
-const errorHandler = function(error, req, res, next) {
-	console.error(error)
-	res.status(500).json({
-		message: `${error.message}`
-	})
-}
+const saveFile = require("../helpers/saveFile");
+const timestamp = require("../helpers/timestamp");
 
-module.exports = errorHandler
+const errorHandler = async function (error, req, res, next) {
+	const status = error.status || 500;
+	const msg = error.code || "internal error"
+
+	console.error(error);
+	const log = `${timestamp()}: ${error}`;
+
+	await saveFile("./logs/errorLog", log);
+
+	res.status(status).json({
+		message: `${msg}`,
+	});
+};
+
+module.exports = errorHandler;

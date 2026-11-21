@@ -1,17 +1,11 @@
-const getAll = function (req, res) {
+const getData = function (req, res) {
 	res.status(201).json({});
 };
 
 const getByID = function (req, res) {
 	const { id } = req.params;
 
-	res.status(200).json({});
-};
-
-const getByFilter = function (req, res) {
-	console.log(req.query);
-
-	res.status(200).json({});
+	res.status(200).send(`id route hit ${id}`);
 };
 
 const addData = function (req, res) {
@@ -59,4 +53,4 @@ const deleteData = function (req, res) {
 	res.status(200).json({});
 };
 
-module.exports = { getAll, getByID, getByFilter, addData, modifyData, deleteData };
+module.exports = { getData, getByID, addData, modifyData, deleteData };

@@ -35,3 +35,31 @@ Stretch goal: add 2FA, SSO, and password reset
 		- time
 	- PUT `/:id` update coffee data
 	- DELETE `/:id` delete coffee data
+
+# API Architecture
+
+`app.js`, the request pipeline:
+
+request -->
+	--> rateLimiter
+	--> express.json()
+	--> urlencoded()
+	--> /api apiRoutes
+	--> /api authValidator, emailValidator, authLogger, authRoutes
+	--> errorHandler
+
+Issue: `/api` prefix is shared by auth and coffee routes, we fix by prefixiing with /coffee and /auth
+
+This helps our route vocabulary to be more action oriented and consistent:
+
+GET   /api/v1/coffee
+GET   /api/v1/coffee/:id
+POST  /api/v1/coffee
+PATCH /api/v1/coffee/:id
+DELTE /api/v1/coffee/:id
+
+We move filtering into the first GET / for clarity
+
+Name your functions clearly: ex `getData` is fine now, but what if we need to get different types of data? `listAllCoffee` might be a better function name here.
+
+`auth.validator.js` has route hardcoded path. Better to couple it to the current mounting path instead

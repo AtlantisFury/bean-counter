@@ -15,6 +15,7 @@
 	* res handling too many requests
 */
 
+// TODO: add more resilient ip storage
 const requests = {}
 
 const rateLimiter = function (req, res, next) {
@@ -27,7 +28,7 @@ const rateLimiter = function (req, res, next) {
 			count: 1,
 			startTime: now
 		}
-		next()
+		return next()
 	}
 
 	// if record found, check if 10s passed and reset it
@@ -42,7 +43,7 @@ const rateLimiter = function (req, res, next) {
 	requests[ip].count++
 
 	// if record found AND < 10s AND > 3 attempts, BLOCK
-	if (requests[ip].count > 3) {
+	if (requests[ip].count > 20) {
 		return res.status(429).json({
 			message: "Too many requests"
 		})

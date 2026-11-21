@@ -1,5 +1,6 @@
 const register = function (req, res) {
 	const { fullName, email, password, phone } = req.body;
+	// TODO: critical security defect REMOVE before completion
 	console.log(fullName, email, password, phone)
 
 	res.status(201).json({})

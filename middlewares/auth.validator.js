@@ -9,12 +9,16 @@
 	* it should use regex to check if an email is valid
 	* if it is, continue, if it isn't, send a 400 response
 	* apply it to the register/login endpoint and test
+	
+	? Challenge
+	* modify and couple validator to the route-specific path
 */
 
 const authValidator = function (req, res, next) {
-	const { fullName, email, password, phone } = req.body	
-
+	console.log(req)
 	if (req.url === "/register") {
+		const { fullName, email, password, phone } = req.body
+		
 		if (!fullName || !email || !password || !phone ) {
 			return res.status(400).json({
 				message: "Malformed request"
@@ -23,6 +27,9 @@ const authValidator = function (req, res, next) {
 	}
 	
 	if (req.url === "/login") {
+		const { email, password } = req.body
+
+		console.log(email, password)
 		if (!email || !password) {
 			return res.status(400).json({
 				message: "Malformed request"
@@ -40,7 +47,10 @@ const emailValidator = function (req, res, next) {
 
 	if (email) {
 		if (!emailRegex.test(email)) {
-			throw new Error("Invalid Email")
+			const error = new Error("Invalid Email")
+			error.status = 422
+			error.code = "Email no bueno"
+			return next(error)
 		}
 	}
 
