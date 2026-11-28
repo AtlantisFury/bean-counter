@@ -1,22 +1,27 @@
-const recipe = require("../models/api.model");
+const Recipe = require("../models/api.model")
 
-const getAll = function (req, res) {
+const getData = function (req, res) {
 	res.status(201).json({});
 };
 
 const getByID = function (req, res) {
 	const { id } = req.params;
 
-	res.status(200).json({});
+	res.status(200).send(`id route hit ${id}`);
 };
 
-const getByFilter = function (req, res) {
-	console.log(req.query);
+const addData = async function (req, res) {
+	/* 
+		? Challenge
+		* utilize sequelize to add a recipe into the datbase
+		* you will need to import your model
+		* you will need to reconfigure addData method to be async
+		* you will need to call create on the data
+		* return a response with message: recipe created and recipe itself
+		* hit the endpoint with Postman
+		* check your recipes table to ensure the recipe saved
+	*/
 
-	res.status(200).json({});
-};
-
-const addData = function (req, res) {
 	const {
 		coffeeName,
 		roaster,
@@ -30,9 +35,9 @@ const addData = function (req, res) {
 		time,
 	} = req.body;
 
-	console.log(req.body)
+	const newRecipe = await Recipe.create(req.body)
 	
-	res.status(200).json({});
+	res.status(201).json(newRecipe);
 };
 
 const modifyData = function (req, res) {
@@ -61,4 +66,4 @@ const deleteData = function (req, res) {
 	res.status(200).json({});
 };
 
-module.exports = { getAll, getByID, getByFilter, addData, modifyData, deleteData };
+module.exports = { getData, getByID, addData, modifyData, deleteData };

@@ -1,9 +1,8 @@
 const router = require("express").Router()
-const { getAll, getByID, getByFilter, addData, modifyData, deleteData } = require("../controllers/api.controllers")
+const { getData, getByID, getByFilter, addData, modifyData, deleteData } = require("../controllers/api.controllers")
 
-router.get("/all", getAll)
+router.get("/all", getData)
 router.get("/:id", getByID)
-router.get("/filter", getByFilter)
 
 router.post("/add", addData)
 router.put("/:id", modifyData)
